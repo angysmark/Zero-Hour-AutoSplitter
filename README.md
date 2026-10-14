@@ -33,3 +33,6 @@ Pausing the game (Esc) does not stop the timer.
 
 ## Credits
 Memory addresses from [ROMaster2's original autosplitter](https://github.com/ROMaster2/LiveSplit.AutoSplitters/blob/master/LiveSplit.CnCGZH.asl).
+
+## License
+[MIT](LICENSE)
