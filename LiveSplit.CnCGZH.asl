@@ -29,6 +29,7 @@ startup
     vars.hasVictory = false;
     vars.paused = false;
     vars.missionLoaded = false;
+    vars.victoryNow = false;
 }
 
 init
@@ -51,11 +52,18 @@ update
     else if (current.map == 2)
         vars.missionLoaded = false;
 
+    // Set for exactly one tick per victory: a repeat 0 -> 1 while already paused is ignored,
+    // so a flickering splash value can't split twice.
+    vars.victoryNow = false;
+
     if (vars.hasVictory)
     {
         // Pause from victory until the cursor appears in the next mission; restarts don't pause.
-        if (current.map > 2 && current.victorySplash == 1 && old.victorySplash == 0)
+        if (!vars.paused && current.map > 2 && current.victorySplash == 1 && old.victorySplash == 0)
+        {
+            vars.victoryNow = true;
             vars.paused = true;
+        }
         else if (vars.paused && current.map > 2 && current.cursorControl == 1 && old.cursorControl == 0)
             vars.paused = false;
     }
@@ -68,8 +76,7 @@ start
 
 split
 {
-    return vars.hasVictory && settings["split_victory"] && current.map > 2
-        && current.victorySplash == 1 && old.victorySplash == 0;
+    return settings["split_victory"] && vars.victoryNow;
 }
 
 isLoading
